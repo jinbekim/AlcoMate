@@ -19,7 +19,6 @@ export const calculateBacValue = ({
   weight,
   gender,
   hours,
-
 }: BacVariables) => {
   const bacValue = (alcoholConsumed / (weight * 분포계수(gender))) - (시간당분해되는알콜비율 * hours);
 

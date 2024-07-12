@@ -1,35 +1,27 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import './App.css';
+import { AlcoholCard } from '@/present/AlcoholCard';
+import { Alcohol } from './domain/types';
+import { useDrinkAlcohol } from './application/useDrinkAlcohol';
+import { AvatarCard } from './present/AvatarCard';
+import { AlcoholGauge } from './present/AlcoholGauge';
 
 function App() {
-  const [count, setCount] = useState(0)
+	const selectedAlcohol: Alcohol[] = ['soju', 'beer', 'wine'];
+	const { addAlcohol, alcoholConsumed } = useDrinkAlcohol();
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+	return (
+		<main className="w-full h-full flex flex-col justify-center items-center">
+			<section className="w-full h-3/5 bg-green-200">
+				{<AvatarCard bac={alcoholConsumed} />}
+				{<AlcoholGauge bac={alcoholConsumed} />}
+			</section>
+			<section className="w-full h-2/5 bg-green-400 flex justify-center items-center">
+				{selectedAlcohol.map((alcohol) => (
+					<AlcoholCard key={alcohol} alcohol={alcohol} onClick={addAlcohol} />
+				))}
+			</section>
+		</main>
+	);
 }
 
-export default App
+export default App;
