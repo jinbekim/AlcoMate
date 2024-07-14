@@ -1,11 +1,13 @@
+import { calculateBacValue } from "@/domain/calculateBAC";
+import { calculateAlcoholConsumed } from "@/domain/intakeQuantity";
 import { Alcohol } from "@/domain/types";
 import { create } from "zustand";
 
 
 const calculateAlcohol = (alcohol: Alcohol) => {
   switch (alcohol) {
-    case "soju": // 1 shot of soju is 1 unit of alcohol
-      return 7;
+    case "soju":
+      return calculateAlcoholConsumed(40, 17);
     case "beer":
       return 6.3;
     case "wine":
@@ -23,9 +25,15 @@ const useAlcoholConsumed = create<{
   addAlcohol: (alcohol: Alcohol) => set((state) => ({ alcoholConsumed: state.alcoholConsumed + calculateAlcohol(alcohol) })),
 }));
 
-
-
+/**
+ * TODO: Save the alcohol consumed in the local storage or somewhere
+ */
 export const useDrinkAlcohol = () => {
   const { alcoholConsumed, addAlcohol } = useAlcoholConsumed();
-  return { alcoholConsumed, addAlcohol };
+  const estimatedBac = calculateBacValue({
+    alcoholConsumed,
+    gender: 'male',
+    weight: 70
+  }).toFixed(4);
+  return { alcoholConsumed, addAlcohol, estimatedBac };
 }

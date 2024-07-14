@@ -1,16 +1,16 @@
 interface AvatarCardProps {
-	bac: number;
+	estimatedBac: string;
 }
 
-export const AvatarCard = ({ bac }: AvatarCardProps) => {
+export const AvatarCard = ({ estimatedBac }: AvatarCardProps) => {
 	const imgUrl = new URL('/src/assets/image.png', import.meta.url);
 
 	return (
-		<figure className="rounded-md">
+		<figure className="rounded-md h-5/6">
 			<img
-				className="object-cover w-full h-full"
+				className="object-contain w-full h-full"
 				src={imgUrl.toString()}
-				alt={`bac: ${bac} image`}
+				alt={`bac: ${estimatedBac} image`}
 			/>
 		</figure>
 	);

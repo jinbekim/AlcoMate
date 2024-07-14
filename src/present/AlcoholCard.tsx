@@ -6,6 +6,7 @@ interface AlcoholCardProps {
 }
 
 export const AlcoholCard = ({ alcohol, onClick }: AlcoholCardProps) => {
+const imgUrl =	new URL(`/src/assets/${alcohol}.png`, import.meta.url);
 	return (
 		<button
 			className="w-1/3 h-full flex flex-col justify-center items-center"
@@ -14,7 +15,7 @@ export const AlcoholCard = ({ alcohol, onClick }: AlcoholCardProps) => {
 			<figure className="w-1/2 h-1/2">
 				<img
 					className="object-cover w-full h-full"
-					src={`https://source.unsplash.com/1600x900/?${alcohol}`}
+					src={imgUrl.toString()}
 					alt={alcohol}
 				/>
 				<figcaption> {alcohol}</figcaption>

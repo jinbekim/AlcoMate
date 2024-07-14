@@ -7,13 +7,13 @@ import { AlcoholGauge } from './present/AlcoholGauge';
 
 function App() {
 	const selectedAlcohol: Alcohol[] = ['soju', 'beer', 'wine'];
-	const { addAlcohol, alcoholConsumed } = useDrinkAlcohol();
+	const { addAlcohol, estimatedBac } = useDrinkAlcohol();
 
 	return (
 		<main className="w-full h-full flex flex-col justify-center items-center">
-			<section className="w-full h-3/5 bg-green-200">
-				{<AvatarCard bac={alcoholConsumed} />}
-				{<AlcoholGauge bac={alcoholConsumed} />}
+			<section className="w-full h-3/5 bg-cyan-800">
+				{<AvatarCard estimatedBac={estimatedBac} />}
+				{<AlcoholGauge estimatedBac={estimatedBac} gender="male" />}
 			</section>
 			<section className="w-full h-2/5 bg-green-400 flex justify-center items-center">
 				{selectedAlcohol.map((alcohol) => (
