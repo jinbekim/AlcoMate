@@ -1,39 +1,54 @@
-import { calculateBacValue } from "@/domain/calculateBAC";
-import { calculateAlcoholConsumed } from "@/domain/intakeQuantity";
+import { Drink, Macju500, SojuOneShot, WineOneGlass } from "@/domain/drink";
 import { Alcohol } from "@/domain/types";
+import { useMemo } from "react";
 import { create } from "zustand";
+import { usePersonalInfo } from "./usePersonalInfo";
+import { calculateBacValue } from "@/domain/widmarkFormula";
 
 
-const calculateAlcohol = (alcohol: Alcohol) => {
+const drink = (alcohol: Alcohol): Drink => {
   switch (alcohol) {
     case "soju":
-      return calculateAlcoholConsumed(40, 17);
+      return new SojuOneShot();
     case "beer":
-      return 6.3;
+      return new Macju500();
     case "wine":
-      return 10;
+      return new WineOneGlass();
     default:
-      return 0;
+      throw new Error("Invalid alcohol");
   }
 }
 
 const useAlcoholConsumed = create<{
-  alcoholConsumed: number;
-  addAlcohol: (alcohol: Alcohol) => void;
+  alcoholHistory: Drink[];
+  drinkAlcohol: (alcohol: Alcohol) => void;
 }>(set => ({
-  alcoholConsumed: 0,
-  addAlcohol: (alcohol: Alcohol) => set((state) => ({ alcoholConsumed: state.alcoholConsumed + calculateAlcohol(alcohol) })),
+  alcoholHistory: [],
+  drinkAlcohol: (alcohol: Alcohol) => set((state) => {
+    const newDrink = drink(alcohol);
+    return {
+      alcoholHistory: [...state.alcoholHistory, newDrink]
+    };
+  })
 }));
 
 /**
  * TODO: Save the alcohol consumed in the local storage or somewhere
  */
 export const useDrinkAlcohol = () => {
-  const { alcoholConsumed, addAlcohol } = useAlcoholConsumed();
-  const estimatedBac = calculateBacValue({
-    alcoholConsumed,
-    gender: 'male',
-    weight: 70
-  }).toFixed(4);
-  return { alcoholConsumed, addAlcohol, estimatedBac };
+  const { alcoholHistory, drinkAlcohol } = useAlcoholConsumed();
+  const user = usePersonalInfo();
+
+  const estimatedBac = useMemo(() => {
+    const consumed = alcoholHistory.reduce((acc, drink) => acc + drink.alcoholConsumed, 0);
+
+    return calculateBacValue({
+      alcoholConsumed: consumed,
+      weight: user.weight,
+      gender: user.gender,
+      time: alcoholHistory[alcoholHistory.length - 1]?.elapsedTime,
+    })
+  }, [alcoholHistory, user]);
+
+  return { estimatedBac, alcoholHistory, drinkAlcohol };
 }

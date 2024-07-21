@@ -6,7 +6,7 @@ interface AlcoholCardProps {
 }
 
 export const AlcoholCard = ({ alcohol, onClick }: AlcoholCardProps) => {
-const imgUrl =	new URL(`/src/assets/${alcohol}.png`, import.meta.url);
+	const imgUrl = new URL(`/src/assets/${alcohol}.svg`, import.meta.url);
 	return (
 		<button
 			className="w-1/3 h-full flex flex-col justify-center items-center"

@@ -8,7 +8,7 @@ export type BacVariables = {
   alcoholConsumed: number;
   weight: number
   gender: 'male' | 'female'
-  hours?: number
+  time?: number // millisecond
 }
 
 //https://m.blog.naver.com/cubelawfirm/222774409053
@@ -17,18 +17,13 @@ export const calculateBacValue = ({
   alcoholConsumed,
   weight,
   gender,
-  hours,
+  time,
 }: BacVariables) => {
-  const bacValue = (alcoholConsumed / (weight * 10 * 성별계수[gender])) - (시간당분해되는알콜비율 * (hours ?? 0));
+  const hours = +(time ? time / 1000 / 60 / 60 : 0).toFixed(1);
+  const bacValue = (alcoholConsumed / (weight * 10 * 성별계수[gender])) - (시간당분해되는알콜비율 * (hours));
 
-  return Math.max(bacValue, 0);
+  return Math.max(bacValue, 0).toFixed(4);
 }
-
-export const getMetabolizedAlcohol = ({ weight, gender }: BacVariables) => {
-  const metabolizedAlcohol = 시간당분해되는알콜비율 * weight * 성별계수[gender] * (1 / 60);
-  return metabolizedAlcohol;
-}
-
 /** NOTE:
  * 도로교통법 44조 제 4항
  * 운전이 금지되는 술에 취한 상태에 해당하는 혈중알콜농도는 0.03%이상인 경우로 규정하고 있다.
