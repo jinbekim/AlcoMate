@@ -4,6 +4,7 @@ import { Alcohol } from './domain/types';
 import { useDrinkAlcohol } from './application/useDrinkAlcohol';
 import { AvatarCard } from './present/AvatarCard';
 import { AlcoholGauge } from './present/AlcoholGauge';
+import { is치사량 } from './domain/치사량';
 
 function App() {
 	const selectedAlcohol: Alcohol[] = ['soju', 'beer', 'wine'];
@@ -17,7 +18,12 @@ function App() {
 			</section>
 			<section className="w-full h-2/5 bg-green-400 flex justify-center items-center">
 				{selectedAlcohol.map((alcohol) => (
-					<AlcoholCard key={alcohol} alcohol={alcohol} onClick={drinkAlcohol} />
+					<AlcoholCard
+						key={alcohol}
+						alcohol={alcohol}
+						disabled={is치사량(estimatedBac)}
+						onClick={drinkAlcohol}
+					/>
 				))}
 			</section>
 		</main>
