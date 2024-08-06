@@ -3,6 +3,6 @@
   text-align: center;
   min-height: 100dvh;
   max-height: 100dvh;
-  height: 100dvh;
+  height: auto;
   width: 100vw;
 }
